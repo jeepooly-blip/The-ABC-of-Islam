@@ -6,12 +6,13 @@ import { BookOpen, ArrowLeft, Brain, Trophy, Lightbulb, ArrowRight, RotateCcw, C
 import { useAppStore } from '@/lib/store';
 import { getTopicById, CATEGORIES, getCategoryById } from '@/lib/topics';
 import { getContent } from '@/lib/content';
-import { t } from '@/lib/translations';
+import { t, getCategoryName } from '@/lib/translations';
 import { isRTL } from '@/components/layout/LanguagePicker';
 import AudioNarrator from '@/components/content/AudioNarrator';
 import ImageCard from '@/components/content/ImageCard';
 import LanguagePicker from '@/components/layout/LanguagePicker';
 import AgeSelector from '@/components/content/AgeSelector';
+import ExportModal from '@/components/export/ExportModal';
 import type { Topic, AgeLevel } from '@/types';
 
 function getText(val: any, locale?: string): string {
@@ -97,8 +98,7 @@ export default function TopicPage() {
       setShowResult(false);
     } else {
       setFinished(true);
-      const lastCorrect = selected === topicData.quiz[currentQ].correct ? 1 : 0;
-      const finalScore = score + lastCorrect;
+      const finalScore = score;
       setQuizScore(topicId, finalScore);
       if (finalScore === topicData.quiz.length) {
         addBadge(`${topicId}-master`);
@@ -126,7 +126,7 @@ export default function TopicPage() {
           {category && (
             <div className="flex items-center gap-2 mb-4 text-sm text-gray-500">
               <span>{category.emoji}</span>
-              <span>{typeof category.name === 'string' ? category.name : getText(category.name, locale)}</span>
+              <span>{getCategoryName(category.id, locale)}</span>
             </div>
           )}
 
@@ -169,6 +169,7 @@ export default function TopicPage() {
             <Brain className="w-5 h-5" />
             {t(locale, 'takeQuiz')}
           </button>
+          <ExportModal content={topicData ? [topicData] : []} currentTopicId={topicId} />
         </div>
       </div>
 

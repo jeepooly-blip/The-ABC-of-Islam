@@ -570,3 +570,52 @@ export function t(locale: Locale, key: keyof typeof TRANSLATIONS.en): string {
 export function getTranslations(locale: Locale) {
   return TRANSLATIONS[locale] || TRANSLATIONS.en;
 }
+
+const CATEGORY_NAMES: Record<string, Record<Locale, string>> = {
+  pillars_of_islam: {
+    en: 'Pillars of Islam', ar: 'أركان الإسلام', ur: 'اسلام کے ارکان', tr: "İslam'ın Sütunları",
+    fr: "Piliers de l'Islam", es: 'Pilares del Islam', hi: 'इस्लाम के स्तंभ',
+    id: 'Rukun Islam', de: 'Säulen des Islam', ru: 'Столпы Ислама',
+    bn: 'ইসলামের স্তম্ভ', pt: 'Pilares do Islã', zh: '伊斯兰五功',
+    ja: 'イスラムの五柱', sw: 'Nguzo za Uislamu', ko: '이슬람의 기둥',
+  },
+  core_beliefs: {
+    en: 'Core Beliefs', ar: 'العقائد الأساسية', ur: 'بنیادی عقائد', tr: 'Temel İnançlar',
+    fr: 'Croyances Fondamentales', es: 'Creencias Fundamentales', hi: 'मूल विश्वास',
+    id: 'Kepercayaan Inti', de: 'Kernglaubenssätze', ru: 'Основные Убеждения',
+    bn: 'মৌলিক বিশ্বাস', pt: 'Crenças Fundamentais', zh: '核心信仰',
+    ja: '基本的な信仰', sw: 'Imani Kuu', ko: '핵심 신념',
+  },
+  daily_practices: {
+    en: 'Daily Practices', ar: 'الممارسات اليومية', ur: 'روزانہ کے عمل', tr: 'Günlük Pratikler',
+    fr: 'Pratiques Quotidiennes', es: 'Prácticas Diarias', hi: 'दैनिक अभ्यास',
+    id: 'Praktik Sehari-hari', de: 'Tägliche Praktiken', ru: 'Ежедневные Практики',
+    bn: 'দৈনিক অনুশীলন', pt: 'Práticas Diárias', zh: '日常实践',
+    ja: '毎日の実践', sw: 'Mazoezi ya Kila Siku', ko: '일상 실천',
+  },
+  islamic_values: {
+    en: 'Islamic Values', ar: 'القيم الإسلامية', ur: 'اسلامی اقدار', tr: 'İslami Değerler',
+    fr: 'Valeurs Islamiques', es: 'Valores Islámicos', hi: 'इस्लामिक मूल्य',
+    id: 'Nilai Islam', de: 'Islamische Werte', ru: 'Исламские Ценности',
+    bn: 'ইসলামিক মূল্য', pt: 'Valores Islâmicos', zh: '伊斯兰价值观',
+    ja: 'イスラムの価値観', sw: 'Thamani za Kiislamu', ko: '이슬람 가치관',
+  },
+  stories_history: {
+    en: 'Stories & History', ar: 'القصص والتاريخ', ur: 'کہانیاں اور تاریخ', tr: 'Hikayeler ve Tarih',
+    fr: 'Histoires et Histoire', es: 'Historias e Historia', hi: 'कहानियाँ और इतिहास',
+    id: 'Cerita & Sejarah', de: 'Geschichten & Geschichte', ru: 'Истории и История',
+    bn: 'গল্প ও ইতিহাস', pt: 'Histórias e História', zh: '故事与历史',
+    ja: '物語と歴史', sw: 'Hadithi na Historia', ko: '이야기와 역사',
+  },
+  special_times: {
+    en: 'Special Times', ar: 'الأوقات الخاصة', ur: 'خاص مواقع', tr: 'Özel Zamanlar',
+    fr: 'Temps Spéciaux', es: 'Tiempos Especiales', hi: 'विशेष समय',
+    id: 'Waktu Khusus', de: 'Besondere Zeiten', ru: 'Особые Времена',
+    bn: 'বিশেষ সময়', pt: 'Momentos Especiais', zh: '特殊时节',
+    ja: '特別な時期', sw: 'Nyakati Maalum', ko: '특별한 시기',
+  },
+};
+
+export function getCategoryName(categoryId: string, locale: Locale): string {
+  return CATEGORY_NAMES[categoryId]?.[locale] || CATEGORY_NAMES[categoryId]?.en || categoryId;
+}

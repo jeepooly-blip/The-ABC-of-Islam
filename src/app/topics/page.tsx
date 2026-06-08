@@ -1,16 +1,19 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Trophy, X } from 'lucide-react';
 import LanguagePicker from '@/components/layout/LanguagePicker';
 import AgeSelector from '@/components/content/AgeSelector';
+import BadgeBoard from '@/components/gamification/BadgeBoard';
 import { useAppStore } from '@/lib/store';
 import { CATEGORIES, getTopicsByCategory } from '@/lib/topics';
-import { t } from '@/lib/translations';
+import { t, getCategoryName } from '@/lib/translations';
 
 export default function TopicsPage() {
   const router = useRouter();
   const { locale } = useAppStore();
+  const [showBadges, setShowBadges] = useState(false);
 
   return (
     <main className="min-h-screen">
@@ -22,6 +25,13 @@ export default function TopicsPage() {
           <span className="font-bold text-sm gradient-text hidden sm:block">{t(locale, 'title')}</span>
         </div>
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowBadges(true)}
+            className="flex items-center gap-1 px-3 py-2 bg-accent/10 text-accent rounded-xl font-medium text-sm hover:bg-accent/20 transition-colors"
+          >
+            <Trophy className="w-4 h-4" />
+            <span className="hidden sm:inline">{t(locale, 'badges')}</span>
+          </button>
           <AgeSelector />
           <LanguagePicker />
         </div>
@@ -43,7 +53,7 @@ export default function TopicsPage() {
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-3xl">{category.emoji}</span>
                   <h2 className="text-xl font-bold gradient-text">
-                    {typeof category.name === 'string' ? category.name : (category.name as any)[locale] || category.name.en}
+                    {getCategoryName(category.id, locale)}
                   </h2>
                 </div>
 
@@ -77,6 +87,23 @@ export default function TopicsPage() {
           })}
         </div>
       </div>
+
+      {showBadges && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div
+            className="bg-white rounded-3xl p-6 w-full max-w-md card-shadow"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold gradient-text">{t(locale, 'yourBadges')}</h3>
+              <button onClick={() => setShowBadges(false)} className="p-1 hover:bg-gray-100 rounded-lg">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <BadgeBoard />
+          </div>
+        </div>
+      )}
     </main>
   );
 }

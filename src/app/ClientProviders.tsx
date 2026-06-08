@@ -3,6 +3,7 @@
 import { ReactNode, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useAppStore } from '@/lib/store';
+import { isRTL } from '@/components/layout/LanguagePicker';
 
 const ServiceWorkerRegistration = dynamic(
   () => import('@/components/ui/ServiceWorkerRegistration'),
@@ -19,6 +20,7 @@ export default function ClientProviders({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = locale;
+    document.documentElement.dir = isRTL(locale) ? 'rtl' : 'ltr';
   }, [locale]);
 
   return (

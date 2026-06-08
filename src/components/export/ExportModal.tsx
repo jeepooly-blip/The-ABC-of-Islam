@@ -102,14 +102,14 @@ export default function ExportModal({ content, currentTopicId }: ExportModalProp
               </button>
 
               <button
-                onClick={handleExportEPUB}
-                disabled={generating}
-                className="w-full flex items-center gap-3 p-4 rounded-xl bg-secondary/10 hover:bg-secondary/20 transition-colors text-left"
+                disabled
+                className="w-full flex items-center gap-3 p-4 rounded-xl bg-secondary/10 opacity-40 cursor-not-allowed text-left"
+                title="Coming soon"
               >
                 <BookOpen className="w-6 h-6 text-secondary" />
                 <div>
                   <div className="font-bold">{t(locale, 'exportEpub')}</div>
-                  <div className="text-sm text-gray-500">EPUB</div>
+                  <div className="text-sm text-gray-500">EPUB — Coming soon</div>
                 </div>
               </button>
 

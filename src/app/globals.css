@@ -11,7 +11,7 @@
   --color-cream: #FFF9E3;
   --color-sky: #E8F8FF;
   --color-card: #ffffff;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 :root {
