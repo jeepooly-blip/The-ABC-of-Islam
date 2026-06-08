@@ -2,9 +2,9 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo } from 'react';
-import { BookOpen, ArrowLeft, Brain, Trophy, Lightbulb, ArrowRight, RotateCcw, CheckCircle, XCircle } from 'lucide-react';
+import { BookOpen, ArrowLeft, Brain, Trophy, Lightbulb, ArrowRight, RotateCcw, CheckCircle, XCircle, Download } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
-import { getTopicById, CATEGORIES, getCategoryById } from '@/lib/topics';
+import { getTopicById, getCategoryById } from '@/lib/topics';
 import { getContent } from '@/lib/content';
 import { t, getCategoryName } from '@/lib/translations';
 import { isRTL } from '@/components/layout/LanguagePicker';
@@ -108,73 +108,82 @@ export default function TopicPage() {
 
   return (
     <main className="min-h-screen">
-      <nav className="p-4 flex items-center justify-between no-print">
-        <div className="flex items-center gap-2">
-          <button onClick={() => router.push('/topics')} className="p-2 hover:bg-white/80 rounded-xl transition-colors">
-            <ArrowLeft className="w-5 h-5 text-primary" />
-          </button>
-          <span className="font-bold text-sm gradient-text hidden sm:block">{t(locale, 'title')}</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <AgeSelector />
-          <LanguagePicker />
+      {/* Sticky Nav */}
+      <nav className="sticky top-0 z-40 bg-white/70 backdrop-blur-xl border-b border-white/50 no-print">
+        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button onClick={() => router.push('/topics')} className="p-2 hover:bg-white/80 rounded-xl transition-colors">
+              <ArrowLeft className="w-5 h-5 text-primary" />
+            </button>
+            <span className="font-bold text-sm gradient-text hidden sm:block">{t(locale, 'title')}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <AgeSelector />
+            <LanguagePicker />
+          </div>
         </div>
       </nav>
 
-      <div className="px-4 pb-8">
-        <div className="max-w-4xl mx-auto">
+      {/* Hero Image */}
+      <div className="relative h-48 sm:h-64 overflow-hidden">
+        <img
+          src={`/images/${topicData.image}`}
+          alt={title}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-6 text-center">
           {category && (
-            <div className="flex items-center gap-2 mb-4 text-sm text-gray-500">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs font-bold mb-3">
               <span>{category.emoji}</span>
               <span>{getCategoryName(category.id, locale)}</span>
             </div>
           )}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white drop-shadow-lg">
+            {title}
+          </h1>
+        </div>
+      </div>
 
-          <div className="text-center mb-6">
-            <span className="text-6xl mb-2 block">{topicMeta.emoji}</span>
-            <h1 className="text-3xl md:text-4xl font-extrabold gradient-text mb-2">{title}</h1>
-          </div>
-
-          <ImageCard
-            src={topicData.image}
-            alt={title}
-            icon={topicMeta.emoji}
-          />
-
+      {/* Content */}
+      <div className="px-4 pb-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Audio + Content Card */}
           <div className="mt-6 p-6 bg-white/80 rounded-2xl card-shadow">
             <div className="flex items-center justify-between mb-4">
               <AudioNarrator text={content} />
+              <ExportModal content={topicData ? [topicData] : []} currentTopicId={topicId} />
             </div>
             <p className="text-lg leading-relaxed whitespace-pre-line">{content}</p>
           </div>
 
-          <div className="mt-4 p-4 bg-accent/10 border-2 border-accent/30 rounded-2xl">
+          {/* Fun Fact */}
+          <div className="mt-4 p-5 bg-gradient-to-r from-accent/10 to-amber-50 border-2 border-accent/20 rounded-2xl">
             <div className="flex items-start gap-3">
-              <Lightbulb className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
+              <div className="text-2xl flex-shrink-0">💡</div>
               <div>
-                <span className="font-bold text-accent">{t(locale, 'funFact')}</span>
-                <p className="mt-1 text-gray-700">{funFact}</p>
+                <span className="font-bold text-accent text-sm uppercase tracking-wide">{t(locale, 'funFact')}</span>
+                <p className="mt-1 text-gray-700 leading-relaxed">{funFact}</p>
               </div>
             </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="mt-8 flex flex-wrap gap-3 justify-center no-print">
+            <button
+              onClick={startQuiz}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-success to-emerald-400 text-white rounded-2xl font-bold card-shadow hover:scale-105 active:scale-95 transition-transform"
+            >
+              <Brain className="w-5 h-5" />
+              {t(locale, 'takeQuiz')}
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="px-4 pb-12 no-print">
-        <div className="max-w-4xl mx-auto flex flex-wrap gap-3 justify-center">
-          <button
-            onClick={startQuiz}
-            className="flex items-center gap-2 px-5 py-3 bg-success text-white rounded-xl font-bold card-shadow hover:scale-105 active:scale-95 transition-transform"
-          >
-            <Brain className="w-5 h-5" />
-            {t(locale, 'takeQuiz')}
-          </button>
-          <ExportModal content={topicData ? [topicData] : []} currentTopicId={topicId} />
-        </div>
-      </div>
-
+      {/* Quiz Modal */}
       {showQuiz && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={resetQuiz}>
           <div
             className="bg-white rounded-3xl p-6 w-full max-w-lg card-shadow max-h-[90vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
@@ -182,7 +191,7 @@ export default function TopicPage() {
             {finished ? (
               <div className={`${rtl ? 'rtl-content' : 'ltr-content'}`}>
                 <div className="flex justify-end mb-2">
-                  <button onClick={resetQuiz} className="p-1 hover:bg-gray-100 rounded-lg">
+                  <button onClick={resetQuiz} className="p-2 hover:bg-gray-100 rounded-xl">
                     <XCircle className="w-5 h-5 text-gray-500" />
                   </button>
                 </div>
@@ -214,7 +223,7 @@ export default function TopicPage() {
                         <div key={i} className={`w-2 h-2 rounded-full ${i <= currentQ ? 'bg-primary' : 'bg-gray-300'}`} />
                       ))}
                     </div>
-                    <button onClick={resetQuiz} className="p-1 hover:bg-gray-100 rounded-lg ml-2">
+                    <button onClick={resetQuiz} className="p-2 hover:bg-gray-100 rounded-xl ml-2">
                       <XCircle className="w-5 h-5 text-gray-500" />
                     </button>
                   </div>
