@@ -1,0 +1,17 @@
+{
+  "name": "The ABC of Islam",
+  "short_name": "ABC Islam",
+  "description": "Interactive Islamic learning book for children",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF9E3",
+  "theme_color": "#FF6B35",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/imgi_1_hero_diverse_children_learning-UGVTaF2PwYqvxmZ8REh4KH.webp",
+      "sizes": "any",
+      "type": "image/webp"
+    }
+  ]
+}
